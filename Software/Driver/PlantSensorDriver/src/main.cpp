@@ -1,18 +1,15 @@
 #include <Arduino.h>
+#include <esp_now.h>
+#include <WiFi.h>
 
-// put function declarations here:
-int myFunction(int, int);
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Serial.begin(921600);
+
+  // Initialize ESP-NOW
+  WiFi.mode(WIFI_STA);
+  esp_now_init();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-}
-
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
 }
