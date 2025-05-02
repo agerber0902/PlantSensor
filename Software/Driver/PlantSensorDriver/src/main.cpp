@@ -2,6 +2,8 @@
 #include <esp_now.h>
 #include <WiFi.h>
 #include "RgbControl/RgbControl.h"
+#include "TemperatureControl/TemperatureControl.h"
+#include "MoistureControl/MoistureControl.h"
 
 //-- Define pins
 
@@ -33,14 +35,15 @@ void PWM_Setup();
 void control_Setup();
 //-- End of Define Functions
 
-//-- Define LED Control
-RgbControl rgbControl(2, 1, 0, 3, 4, 5); // Red Pin, Green Pin, Blue Pin, Red Channel, Green Channel, Blue Channel
-//-- End of Define LED Control
-
 //-- Define Control Class
 typedef struct control 
 {
-  RgbControl rgbControl;
+  // Define the led control class
+  RgbControl rgbControl = RgbControl(2, 1, 0, 3, 4, 5); // Red Pin, Green Pin, Blue Pin, Red Channel, Green Channel, Blue Channel
+  // Define the temperature control class
+  TemperatureControl temperatureControl = TemperatureControl(3.3, 4095.0, 80.0); // Voltage Reference, Analog Resolution, Alert Threshold
+  // Define the moisture control class
+  MoistureControl moistureControl = MoistureControl(3.3, 4095.0, 2.5); // Voltage Reference, Analog Resolution, Alert Threshold
 } control;
 //-- End of Define Control Class
 
@@ -99,6 +102,12 @@ void control_Setup()
 {
   // Setup the RGB control
   driverControl.rgbControl.setup();
+
+  // Setup the temperature control
+  // No setup needed for temperature control
+
+  // Setup the moisture control
+  // No setup needed for moisture control
 
   return;
 }
