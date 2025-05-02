@@ -17,6 +17,11 @@ class MoistureControl : public BaseControl
         // We know the input need converted to voltage
         // and then to moisture
         float getMoisture(float analogInput);
+
+        // Set the alert if the moisture is below the threshold
+        bool alert(){
+            return moisture < alertThreshold;
+        }
 };
 
 #endif

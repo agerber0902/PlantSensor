@@ -11,6 +11,7 @@ class TemperatureControl : public BaseControl
         float temperature; // Temperature value
         float humidity; // Humidity value
         float alertThreshold; // Alert threshold
+
     public:
         // Constructor
         TemperatureControl(float voltageReference = 3.3, float analogResolution = 4095.0, float alertThreshold = 75.0);
@@ -21,6 +22,11 @@ class TemperatureControl : public BaseControl
         float getTemperature(float analogInput);
 
         //TODO: Get the humidity value from input
+
+        // Set the alert if the temperature is above the threshold
+        bool alert(){
+            return temperature > alertThreshold;
+        }
 
 };
 
