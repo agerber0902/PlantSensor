@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <esp_now.h>
 #include <WiFi.h>
+#include "RgbControl/RgbControl.h"
 
 //-- Define pins
 
@@ -27,7 +28,26 @@
 
 //-- End of Define pins
 
+//-- Define Functions
 void PWM_Setup();
+void control_Setup();
+//-- End of Define Functions
+
+//-- Define LED Control
+RgbControl rgbControl(2, 1, 0, 3, 4, 5); // Red Pin, Green Pin, Blue Pin, Red Channel, Green Channel, Blue Channel
+//-- End of Define LED Control
+
+//-- Define Control Class
+typedef struct control 
+{
+  RgbControl rgbControl;
+} control;
+//-- End of Define Control Class
+
+//-- Define Variables
+// Control class instance
+control driverControl;
+//-- End of Define Variables
 
 void setup()
 {
@@ -70,6 +90,15 @@ void PWM_Setup()
   ledcSetup(WATER_PUMP_PWM_CHANNEL, WATER_PUMP_PWM_FREQUENCY, WATER_PUMP_PWM_RESOLUTION);
   // Attach PWM output to the water pump pin
   ledcAttachPin(WATER_PUMP_PIN, WATER_PUMP_PWM_CHANNEL);
+
+  return;
+}
+
+// Function to setup the control class
+void control_Setup()
+{
+  // Setup the RGB control
+  driverControl.rgbControl.setup();
 
   return;
 }
