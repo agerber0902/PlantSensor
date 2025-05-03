@@ -53,7 +53,13 @@ void setup() {
   WiFi.mode(WIFI_STA);
   esp_now_init();
 
+  // Set up callback
+  esp_now_register_send_cb([](const uint8_t* mac, esp_now_send_status_t status) {
+
+    Serial.print("Send Status: ");
+    Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Success" : "Fail");
   
+  });
 
 }
 
