@@ -88,6 +88,9 @@ void setup()
   // Setup PWM for fan and water pump
   PWM_Setup();
 
+  // Setup the controls
+  control_Setup();
+
   // Initialize ESP-NOW
   WiFi.mode(WIFI_STA);
   esp_now_init();
