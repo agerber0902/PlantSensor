@@ -65,4 +65,21 @@ void setup() {
 
 void loop() {
 
+  // Read dht sensor values
+  sensorMessage.temperature = dhtTemperatureSensor.readTemperature();
+  sensorMessage.humidity = dhtTemperatureSensor.readHumidity();
+  Serial.printf("Temperature Reading from DHT sensor: %f\n", sensorMessage.temperature);
+  Serial.printf("Humidity Reading from DHT sensor: %f\n", sensorMessage.humidity);
+
+  // Read uv value
+  sensorMessage.uv = analogRead(UV_SENSOR_INPUT_PIN);
+  Serial.printf("UV Reading from photo resistor: %f\n", sensorMessage.uv);
+  
+  // Read moisture value
+  sensorMessage.moisture = analogRead(MOISTURE_SENSOR_INPUT_PIN);
+  Serial.printf("Moisture Reading from input pin: %f\n", sensorMessage.moisture);
+
+  esp_now_send(peer_mac_addr, (uint8_t*)&sensorMessage, sizeof(sensorMessage));
+
+  delay(5000); // Wait for 5 seconds before sending the next message
 }
