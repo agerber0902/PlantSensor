@@ -6,12 +6,12 @@
 //-- Define pins
 
 // Define the pin for the DHT sensor
-#define TEMPERATURE_SENSOR_INPUT_PIN 2
+#define TEMPERATURE_SENSOR_INPUT_PIN 4
 // Define the pin for the moisture sensor
-#define MOISTURE_SENSOR_INPUT_PIN 0
+#define MOISTURE_SENSOR_INPUT_PIN 2
 // Define the pin for the light sensor
-#define UV_SENSOR_INPUT_PIN 1
-
+#define UV_SENSOR_INPUT_PIN 3
+#define DHTTYPE DHT11   
 //-- End of Define pins
 
 //-- Define the message we are sending
@@ -25,7 +25,7 @@ typedef struct send_message
 //-- End of Define the message we are sending
 
 // Define and configure the DHT sensor
-DHT dhtTemperatureSensor(TEMPERATURE_SENSOR_INPUT_PIN, DHT11);
+DHT dht = DHT(TEMPERATURE_SENSOR_INPUT_PIN, DHT11);
 
 //-- Define Variables
 
@@ -40,6 +40,8 @@ void setup() {
 
   // Setup serial communication
   Serial.begin(921600);
+  analogSetAttenuation(ADC_11db); // or ADC_0db for minimal gain
+  analogReadResolution(12);
 
   // Configure pin modes
   pinMode(MOISTURE_SENSOR_INPUT_PIN, INPUT);
@@ -47,7 +49,7 @@ void setup() {
   pinMode(TEMPERATURE_SENSOR_INPUT_PIN, INPUT);
 
   // Initialize the DHT sensor
-  dhtTemperatureSensor.begin();
+  dht.begin();
   
   // Setup ESP NOW
   WiFi.mode(WIFI_STA);
@@ -66,8 +68,8 @@ void setup() {
 void loop() {
 
   // Read dht sensor values
-  sensorMessage.temperature = dhtTemperatureSensor.readTemperature();
-  sensorMessage.humidity = dhtTemperatureSensor.readHumidity();
+  sensorMessage.temperature = dht.readTemperature();
+  sensorMessage.humidity = dht.readHumidity();
   Serial.printf("Temperature Reading from DHT sensor: %f\n", sensorMessage.temperature);
   Serial.printf("Humidity Reading from DHT sensor: %f\n", sensorMessage.humidity);
 
@@ -79,7 +81,5 @@ void loop() {
   sensorMessage.moisture = analogRead(MOISTURE_SENSOR_INPUT_PIN);
   Serial.printf("Moisture Reading from input pin: %f\n", sensorMessage.moisture);
 
-  esp_now_send(peer_mac_addr, (uint8_t*)&sensorMessage, sizeof(sensorMessage));
-
-  delay(5000); // Wait for 5 seconds before sending the next message
+  delay(1000); // Wait for 5 seconds before sending the next message
 }
