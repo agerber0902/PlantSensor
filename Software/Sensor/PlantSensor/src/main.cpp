@@ -81,5 +81,7 @@ void loop() {
   sensorMessage.moisture = analogRead(MOISTURE_SENSOR_INPUT_PIN);
   Serial.printf("Moisture Reading from input pin: %f\n", sensorMessage.moisture);
 
-  delay(1000); // Wait for 5 seconds before sending the next message
+  esp_now_send(peer_mac_addr, (uint8_t*)&sensorMessage, sizeof(sensorMessage));
+
+  delay(5000); // Wait for 5 seconds before sending the next message
 }
