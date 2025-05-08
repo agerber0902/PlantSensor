@@ -39,7 +39,8 @@ uint8_t peer_mac_addr[] = {0x98, 0x3D, 0xAE, 0xAA, 0xCB, 0x3C};
 void setup() {
 
   // Setup serial communication
-  Serial.begin(921600);
+  Serial.begin(115200);
+  delay(1000); 
   analogSetAttenuation(ADC_11db); // or ADC_0db for minimal gain
   analogReadResolution(12);
 
@@ -53,11 +54,31 @@ void setup() {
   
   // Setup ESP NOW
   WiFi.mode(WIFI_STA);
-  esp_now_init();
+  if (esp_now_init() != ESP_OK) {
+    Serial.println("Error initializing ESP-NOW");
+  } else {
+    Serial.println("ESP-NOW initialized successfully");
+  }
+
+  delay(1000);
+
+  // Register peer
+  esp_now_peer_info_t peerInfo = {};
+  memcpy(peerInfo.peer_addr, peer_mac_addr, 6);
+  peerInfo.channel = 0;  
+  peerInfo.encrypt = false;
+
+  if (!esp_now_is_peer_exist(peer_mac_addr)) {
+    if (esp_now_add_peer(&peerInfo) != ESP_OK) {
+      Serial.println("Failed to add peer");
+      return;
+    }
+  }
 
   // Set up callback
   esp_now_register_send_cb([](const uint8_t* mac, esp_now_send_status_t status) {
 
+    Serial.println(WiFi.macAddress());
     Serial.print("Send Status: ");
     Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Success" : "Fail");
   

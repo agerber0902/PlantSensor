@@ -37,7 +37,7 @@
 typedef struct control 
 {
   // Define the led control class
-  RgbControl rgbControl = RgbControl(2, 1, 0, 3, 4, 5); // Red Pin, Green Pin, Blue Pin, Red Channel, Green Channel, Blue Channel
+  RgbControl rgbControl = RgbControl(4, 3, 2, 3, 4, 5); // Red Pin, Green Pin, Blue Pin, Red Channel, Green Channel, Blue Channel
   // Define the temperature control class
   TemperatureControl temperatureControl = TemperatureControl(3.3, 4095.0, 80.0); // Voltage Reference, Analog Resolution, Alert Threshold
   // Define the moisture control class
@@ -77,7 +77,8 @@ void handleAlerts();
 void setup()
 {
   Serial.begin(921600);
-
+  Serial.println("Serial communication initialized");
+  
   // Configure Pin Modes
 
   pinMode(FAN_POTENTIOMETER_PIN, INPUT);
@@ -93,7 +94,11 @@ void setup()
 
   // Initialize ESP-NOW
   WiFi.mode(WIFI_STA);
-  esp_now_init();
+  if (esp_now_init() != ESP_OK) {
+    return;
+  } else {
+    Serial.println("ESP-NOW initialized successfully");
+  }
 
   // Callback function for receiving data
   esp_now_register_recv_cb([](const uint8_t *mac, const uint8_t *data, int len)
