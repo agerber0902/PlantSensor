@@ -8,9 +8,9 @@
 //-- Define pins
 
 // Pin that controls the speed of the fan motor
-#define FAN_POTENTIOMETER_PIN 5
+#define FAN_POTENTIOMETER_PIN 3
 // Pin that controls the speed of the water pump motor
-#define WATER_PUMP_POTENTIOMETER_PIN 7
+#define WATER_PUMP_POTENTIOMETER_PIN 2
 // Pin that controls the fan motor (BI of TA6585 driver)
 #define FAN_PIN 10
 // Pin that controls the water pump motor (FI of TA6585 driver)
@@ -37,7 +37,7 @@
 typedef struct control 
 {
   // Define the led control class
-  RgbControl rgbControl = RgbControl(4, 3, 2, 3, 4, 5); // Red Pin, Green Pin, Blue Pin, Red Channel, Green Channel, Blue Channel
+  RgbControl rgbControl = RgbControl(6, 5, 4, 3, 4, 5); // Red Pin, Green Pin, Blue Pin, Red Channel, Green Channel, Blue Channel
   // Define the temperature control class
   TemperatureControl temperatureControl = TemperatureControl(80.0); //Alert Threshold
   // Define the moisture control class
@@ -120,6 +120,19 @@ void setup()
 
 void loop()
 {
+  int waterPumpSpeed = analogRead(WATER_PUMP_POTENTIOMETER_PIN);
+  int fanSpeed = analogRead(FAN_POTENTIOMETER_PIN);
+  Serial.printf("Water Pump Speed: %d\n", waterPumpSpeed);
+  Serial.printf("Fan Speed: %d\n", fanSpeed);
+
+  driverControl.rgbControl.fadeToColor({0, 0, 0});
+  delay(500);
+  driverControl.rgbControl.fadeToColor({0,0,255});
+  delay(1000);
+  driverControl.rgbControl.fadeToColor({0, 0, 0});
+  delay(500);
+
+  delay(3000);
 }
 
 // Handle the alert values and control motors from here
