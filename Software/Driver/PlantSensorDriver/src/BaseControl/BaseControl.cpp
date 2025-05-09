@@ -13,6 +13,6 @@ float BaseControl::readFromAnalog(int inputPin) {
 
 // Helper function to convert analog reading to voltage
 float BaseControl::analogToVoltage(float value) {
-    float sensorVoltage = (voltageReference / analogResolution) * value;
+    float sensorVoltage = (value / analogResolution) * voltageReference;
     return sensorVoltage;
 }

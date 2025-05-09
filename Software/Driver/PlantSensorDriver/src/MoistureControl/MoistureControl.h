@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include "BaseControl/BaseControl.h"
 
-class MoistureControl : public BaseControl
+class MoistureControl //: public BaseControl
 {
     private:
         float sensorInput; // Value sent from the sensor
@@ -11,7 +11,7 @@ class MoistureControl : public BaseControl
         float alertThreshold; // Alert threshold
     public:
         // Constructor
-        MoistureControl(float voltageReference = 3.3, float analogResolution = 4095.0, float alertThreshold = 30.0);
+        MoistureControl(float alertThreshold);
 
         // Get the moisture value from input
         // We know the input need converted to voltage
@@ -20,6 +20,8 @@ class MoistureControl : public BaseControl
 
         // Set the alert if the moisture is below the threshold
         bool alert(){
+            Serial.printf("Moisture Testing: %f\n", alertThreshold);
+            // Check if the moisture is below the alert threshold
             return moisture < alertThreshold;
         }
 };
