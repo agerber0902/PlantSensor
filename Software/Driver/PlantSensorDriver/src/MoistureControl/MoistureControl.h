@@ -1,9 +1,8 @@
 #ifndef MOISTURE_CONTROL_H
 #define MOISTURE_CONTROL_H
 #include <Arduino.h>
-#include "BaseControl/BaseControl.h"
 
-class MoistureControl //: public BaseControl
+class MoistureControl
 {
     private:
         float sensorInput; // Value sent from the sensor

@@ -2,9 +2,8 @@
 #define TEMPERATURE_CONTROL_H
 
 #include <Arduino.h>
-#include "BaseControl/BaseControl.h"
 
-class TemperatureControl : public BaseControl
+class TemperatureControl
 {
     private:
         float sensorInput; // Value sent from the sensor
@@ -14,7 +13,7 @@ class TemperatureControl : public BaseControl
 
     public:
         // Constructor
-        TemperatureControl(float voltageReference = 3.3, float analogResolution = 4095.0, float alertThreshold = 75.0);
+        TemperatureControl(float alertThreshold);
 
         // Get the temperature value from input
         // We know the input need converted to voltage

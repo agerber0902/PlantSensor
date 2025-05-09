@@ -39,9 +39,9 @@ typedef struct control
   // Define the led control class
   RgbControl rgbControl = RgbControl(4, 3, 2, 3, 4, 5); // Red Pin, Green Pin, Blue Pin, Red Channel, Green Channel, Blue Channel
   // Define the temperature control class
-  TemperatureControl temperatureControl = TemperatureControl(3.3, 4095.0, 80.0); // Voltage Reference, Analog Resolution, Alert Threshold
+  TemperatureControl temperatureControl = TemperatureControl(80.0); //Alert Threshold
   // Define the moisture control class
-  MoistureControl moistureControl = MoistureControl(3000); // Voltage Reference, Analog Resolution, Alert Threshold
+  MoistureControl moistureControl = MoistureControl(3000); //Alert Threshold
 } control;
 //-- End of Define Control Class
 

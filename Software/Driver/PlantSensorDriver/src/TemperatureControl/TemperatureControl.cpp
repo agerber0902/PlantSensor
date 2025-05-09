@@ -2,10 +2,9 @@
 #include <Arduino.h>
 
 // Constructor
-TemperatureControl::TemperatureControl(float alertThreshold,  float vRef, float resolution)
+TemperatureControl::TemperatureControl(float alertThreshold)
 : 
-alertThreshold(alertThreshold),
-BaseControl(vRef, resolution) {}
+alertThreshold(alertThreshold){}
 
 
 // Get the temperature value from input
