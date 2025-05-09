@@ -140,28 +140,23 @@ void handleAlerts()
     int waterPumpPwmValue = map(waterPumpSpeed, 0, 4095, 0, 255);
     ledcWrite(WATER_PUMP_PWM_CHANNEL, waterPumpPwmValue);
 
-    // Stay here and wait for the moisture to be above the threshold
-    // blink the led to indicate the alert is processing
-    // while(moistureAlert)
-    // {
-    //   // Blink the led
-    //   driverControl.rgbControl.setColor(MOISTURE_ALERT_COLOR);
-    //   delay(500);
-    //   driverControl.rgbControl.setColor({0, 0, 0});
-    //   delay(500);
+    // Test loop to flash led
+    for(int i = 0; i < 5; i++)
+    {
+      // Blink the led
+      driverControl.rgbControl.fadeToColor({0, 0, 0});
+      delay(500);
+      driverControl.rgbControl.fadeToColor(MOISTURE_ALERT_COLOR);
+      delay(500);
+      driverControl.rgbControl.fadeToColor({0, 0, 0});
+      delay(500);
 
-    //   // Read Sensor Value
-    //   Serial.printf("Moisture Alert: %.2f\n", sensorMessage.moisture);
+    }
 
-    //   // Convert to moisture and store in the control class
-    //   float moisture = driverControl.moistureControl.getMoisture(sensorMessage.moisture);
-
-    //   // Check if the moisture is below the alert threshold
-    //   moistureAlert = driverControl.moistureControl.alert();
-
-    //   // Print the moisture value
-    //   Serial.printf("Moisture: %.2f\n", moisture);
-    // }
+    // TODO: we need to create a loop that using espnow to get more data from the sensor to stop the motor
+    // We want to blink an led to indicate the alert is processing
+    // So it will blink the led, turn the motor on, use espnow to get data from sensor, and loop
+    // And then same for the temp
   }
   else if (temperatureAlert)
   {
@@ -175,25 +170,17 @@ void handleAlerts()
 
     // Stay here and wait for the temperature to be below the threshold
     // blink the led to indicate the alert is processing
-    while(temperatureAlert)
+    // Test loop to flash led
+    for(int i = 0; i < 5; i++)
     {
       // Blink the led
-      driverControl.rgbControl.setColor(TEMPERATURE_ALERT_COLOR);
+      driverControl.rgbControl.fadeToColor({0, 0, 0});
       delay(500);
-      driverControl.rgbControl.setColor({0, 0, 0});
+      driverControl.rgbControl.fadeToColor(TEMPERATURE_ALERT_COLOR);
+      delay(500);
+      driverControl.rgbControl.fadeToColor({0, 0, 0});
       delay(500);
 
-      // Read Sensor Value
-      Serial.printf("Temperature Alert: %.2f\n", sensorMessage.temperature);
-
-      // Convert to degrees Fahrenheit and store in the control class
-      float temperature = driverControl.temperatureControl.getTemperature(sensorMessage.temperature);
-
-      // Check if the temperature is above the alert threshold
-      temperatureAlert = driverControl.temperatureControl.alert();
-
-      // Print the temperature value
-      Serial.printf("Temperature: %.2f°F\n", temperature);
     }
   }
   else
@@ -222,7 +209,7 @@ void handleTemperatureInput()
   float temperature = driverControl.temperatureControl.getTemperature(sensorMessage.temperature);
 
   // Check if the temperature is above the alert threshold
-  //temperatureAlert = driverControl.temperatureControl.alert();
+  temperatureAlert = driverControl.temperatureControl.alert();
 
   // Print the temperature value
   Serial.printf("Temperature: %.2f°F\n", temperature);
