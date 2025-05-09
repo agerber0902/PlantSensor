@@ -10,7 +10,7 @@
 // Pin that controls the speed of the fan motor
 #define FAN_POTENTIOMETER_PIN 5
 // Pin that controls the speed of the water pump motor
-#define WATER_PUMP_POTENTIOMETER_PIN 6
+#define WATER_PUMP_POTENTIOMETER_PIN 7
 // Pin that controls the fan motor (BI of TA6585 driver)
 #define FAN_PIN 10
 // Pin that controls the water pump motor (FI of TA6585 driver)
@@ -41,7 +41,7 @@ typedef struct control
   // Define the temperature control class
   TemperatureControl temperatureControl = TemperatureControl(3.3, 4095.0, 80.0); // Voltage Reference, Analog Resolution, Alert Threshold
   // Define the moisture control class
-  MoistureControl moistureControl = MoistureControl(3.3, 4095.0, 2.5); // Voltage Reference, Analog Resolution, Alert Threshold
+  MoistureControl moistureControl = MoistureControl(3000); // Voltage Reference, Analog Resolution, Alert Threshold
 } control;
 //-- End of Define Control Class
 
@@ -127,9 +127,11 @@ void handleAlerts()
 {
   // We can only turn on either the fan or the pump, not both
   // Moisture alert comes first
-
+  Serial.printf("Moisture Alert: %s\n", moistureAlert ? "ON" : "OFF");
   if(moistureAlert)
   {
+    Serial.println("Moisture Alert");
+
     // Set the led color
     driverControl.rgbControl.fadeToColor(MOISTURE_ALERT_COLOR);
 
@@ -140,26 +142,26 @@ void handleAlerts()
 
     // Stay here and wait for the moisture to be above the threshold
     // blink the led to indicate the alert is processing
-    while(moistureAlert)
-    {
-      // Blink the led
-      driverControl.rgbControl.setColor(MOISTURE_ALERT_COLOR);
-      delay(500);
-      driverControl.rgbControl.setColor({0, 0, 0});
-      delay(500);
+    // while(moistureAlert)
+    // {
+    //   // Blink the led
+    //   driverControl.rgbControl.setColor(MOISTURE_ALERT_COLOR);
+    //   delay(500);
+    //   driverControl.rgbControl.setColor({0, 0, 0});
+    //   delay(500);
 
-      // Read Sensor Value
-      Serial.printf("Moisture Alert: %.2f\n", sensorMessage.moisture);
+    //   // Read Sensor Value
+    //   Serial.printf("Moisture Alert: %.2f\n", sensorMessage.moisture);
 
-      // Convert to moisture and store in the control class
-      float moisture = driverControl.moistureControl.getMoisture(sensorMessage.moisture);
+    //   // Convert to moisture and store in the control class
+    //   float moisture = driverControl.moistureControl.getMoisture(sensorMessage.moisture);
 
-      // Check if the moisture is below the alert threshold
-      moistureAlert = driverControl.moistureControl.alert();
+    //   // Check if the moisture is below the alert threshold
+    //   moistureAlert = driverControl.moistureControl.alert();
 
-      // Print the moisture value
-      Serial.printf("Moisture: %.2f\n", moisture);
-    }
+    //   // Print the moisture value
+    //   Serial.printf("Moisture: %.2f\n", moisture);
+    // }
   }
   else if (temperatureAlert)
   {
@@ -220,7 +222,7 @@ void handleTemperatureInput()
   float temperature = driverControl.temperatureControl.getTemperature(sensorMessage.temperature);
 
   // Check if the temperature is above the alert threshold
-  temperatureAlert = driverControl.temperatureControl.alert();
+  //temperatureAlert = driverControl.temperatureControl.alert();
 
   // Print the temperature value
   Serial.printf("Temperature: %.2f°F\n", temperature);
@@ -241,6 +243,8 @@ void handleMoistureInput()
 
   // Print the moisture value
   Serial.printf("Moisture: %.2f\n", moisture);
+
+  Serial.printf("Moisture Alert: %s\n", moistureAlert ? "ON" : "OFF");
 
   return;
 }
